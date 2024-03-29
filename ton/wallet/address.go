@@ -68,7 +68,7 @@ func GetStateInit(pubKey ed25519.PublicKey, ver Version, subWallet uint32) (*tlb
 			MustStoreSlice(pubKey, 256).
 			MustStoreDict(nil). // empty dict of plugins
 			EndCell()
-	case HighloadV2R2, HighloadV2Verified:
+	case HighloadV2R2, HighloadV2Verified, HighloadV2R2WithQueueCleaning:
 		data = cell.BeginCell().
 			MustStoreUInt(uint64(subWallet), 32).
 			MustStoreUInt(0, 64). // last cleaned

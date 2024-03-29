@@ -53,7 +53,7 @@ var _seed = os.Getenv("WALLET_SEED")
 func Test_WalletTransfer(t *testing.T) {
 	seed := strings.Split(_seed, " ")
 
-	for _, v := range []Version{V3R2, V4R2, HighloadV2R2, V3R1, V4R1, HighloadV2Verified} {
+	for _, v := range []Version{V3R2, V4R2, HighloadV2R2, V3R1, V4R1, HighloadV2Verified, HighloadV2R2WithQueueCleaning} {
 		ver := v
 		for _, isSubwallet := range []bool{false, true} {
 			isSubwallet := isSubwallet

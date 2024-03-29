@@ -27,20 +27,21 @@ import (
 type Version int
 
 const (
-	V1R1               Version = 11
-	V1R2               Version = 12
-	V1R3               Version = 13
-	V2R1               Version = 21
-	V2R2               Version = 22
-	V3R1               Version = 31
-	V3R2               Version = 32
-	V3                         = V3R2
-	V4R1               Version = 41
-	V4R2               Version = 42
-	HighloadV2R2       Version = 122
-	HighloadV2Verified Version = 123
-	Lockup             Version = 200
-	Unknown            Version = 0
+	V1R1                          Version = 11
+	V1R2                          Version = 12
+	V1R3                          Version = 13
+	V2R1                          Version = 21
+	V2R2                          Version = 22
+	V3R1                          Version = 31
+	V3R2                          Version = 32
+	V3                                    = V3R2
+	V4R1                          Version = 41
+	V4R2                          Version = 42
+	HighloadV2R2                  Version = 122
+	HighloadV2Verified            Version = 123
+	HighloadV2R2WithQueueCleaning Version = 124
+	Lockup                        Version = 200
+	Unknown                       Version = 0
 )
 
 func (v Version) String() string {
@@ -53,6 +54,8 @@ func (v Version) String() string {
 		return fmt.Sprintf("highload V2R2")
 	case HighloadV2Verified:
 		return fmt.Sprintf("highload V2R2 verified")
+	case HighloadV2R2WithQueueCleaning:
+		return fmt.Sprintf("highload V2R2 with queue cleaning")
 	}
 
 	if v/100 == 2 {
@@ -70,7 +73,7 @@ var (
 		V2R1: _V2R1CodeHex, V2R2: _V2R2CodeHex,
 		V3R1: _V3R1CodeHex, V3R2: _V3R2CodeHex,
 		V4R1: _V4R1CodeHex, V4R2: _V4R2CodeHex,
-		HighloadV2R2: _HighloadV2R2CodeHex, HighloadV2Verified: _HighloadV2VerifiedCodeHex,
+		HighloadV2R2: _HighloadV2R2CodeHex, HighloadV2Verified: _HighloadV2VerifiedCodeHex, HighloadV2R2WithQueueCleaning: _HighloadV2R2WithQueueCleaningCodeHex,
 		Lockup: _LockupCodeHex,
 	}
 	walletCodeBOC = map[Version][]byte{}
@@ -169,7 +172,7 @@ func getSpec(w *Wallet) (any, error) {
 		return &SpecV3{regular, SpecSeqno{}}, nil
 	case V4R1, V4R2:
 		return &SpecV4R2{regular, SpecSeqno{}}, nil
-	case HighloadV2R2, HighloadV2Verified:
+	case HighloadV2R2, HighloadV2Verified, HighloadV2R2WithQueueCleaning:
 		return &SpecHighloadV2R2{regular, SpecQuery{}}, nil
 	}
 
@@ -270,7 +273,7 @@ func (w *Wallet) BuildExternalMessageForMany(ctx context.Context, messages []*Me
 		if err != nil {
 			return nil, fmt.Errorf("build message err: %w", err)
 		}
-	case HighloadV2R2, HighloadV2Verified:
+	case HighloadV2R2, HighloadV2Verified, HighloadV2R2WithQueueCleaning:
 		msg, err = w.spec.(*SpecHighloadV2R2).BuildMessage(ctx, messages)
 		if err != nil {
 			return nil, fmt.Errorf("build message err: %w", err)
